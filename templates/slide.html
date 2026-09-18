@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Slide {{ slide_number }}</title>
+  <style>
+    {{ css_content|safe }}
+  </style>
+</head>
+<body class="{{ theme_class|default('theme-notebook') }}">
+
+  <!-- Header: Engineering Notebook Style -->
+  <div class="header-bar">
+    <div class="notebook-tag">
+      <span class="icon">📓</span>
+      <span>ENGINEERING CHEAT SHEET</span>
+    </div>
+    <div class="slide-number">Slide {{ slide_number }} / 5</div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area">
+    <div class="category-tag">
+      <span>⚡</span> {{ category }}
+    </div>
+    <h1 class="main-title">{{ title_html|safe }}</h1>
+    {% if subtitle %}
+    <p class="subtitle">{{ subtitle }}</p>
+    {% endif %}
+
+    <!-- Real-World Analogy / 5-Second Mental Model Sticky Note (if present) -->
+    {% if mental_model %}
+    <div class="sticky-note {{ mental_model.style|default('sticky-yellow') }}">
+      <div class="sticky-tape"></div>
+      <div class="sticky-header">
+        <span>💡</span>
+        <span>{{ mental_model.title|default('5-Second Mental Model') }}</span>
+      </div>
+      <div class="sticky-body">
+        {{ mental_model.body|safe }}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Architecture Diagram (Prominent Center) -->
+    {% if diagram_svg %}
+    <div class="svg-diagram-container">
+      {{ diagram_svg|safe }}
+    </div>
+    {% endif %}
+
+    <!-- 2-Column Cheat Sheet Grid (When to Use vs When it Fails) -->
+    {% if cheat_sheet %}
+    <div class="cheat-sheet-grid">
+      <div class="sticky-note sticky-mint">
+        <div class="sticky-tape"></div>
+        <div class="sticky-header">
+          <span>🟢</span>
+          <span>When to Use</span>
+        </div>
+        <div class="sticky-body">
+          {{ cheat_sheet.when_to_use|safe }}
+        </div>
+      </div>
+
+      <div class="sticky-note sticky-coral">
+        <div class="sticky-tape"></div>
+        <div class="sticky-header">
+          <span>🔴</span>
+          <span>When it Fails</span>
+        </div>
+        <div class="sticky-body">
+          {{ cheat_sheet.when_it_fails|safe }}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Interview Pop Quiz Card (Slide 5) -->
+    {% if quiz %}
+    <div class="interview-card">
+      <div class="title">
+        <span>🎯</span>
+        <span>{{ quiz.title|default('Senior System Design Interview Dilemma') }}</span>
+      </div>
+      <div class="question-body">
+        {{ quiz.question|safe }}
+      </div>
+      <div class="options">
+        <div class="option-box"><b>A)</b> {{ quiz.option_a|safe }}</div>
+        <div class="option-box"><b>B)</b> {{ quiz.option_b|safe }}</div>
+      </div>
+    </div>
+
+    <!-- Engagement Discussion Sticky Note -->
+    <div class="sticky-note sticky-yellow" style="margin-top: 20px;">
+      <div class="sticky-tape"></div>
+      <div class="sticky-header">
+        <span>💬</span>
+        <span>Drop Your Answer in the Comments</span>
+      </div>
+      <div class="sticky-body">
+        Drop <b>A</b> or <b>B</b> below with your architectural reasoning! The most insightful answer gets pinned at the top 📌
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Regular Sketch Cards -->
+    {% if cards %}
+    <div class="card-grid">
+      {% for card in cards %}
+      <div class="sketch-card {{ card.class|default('') }}">
+        {% if card.title %}
+        <div class="card-header">
+          <span style="font-size: 26px;">{{ card.icon|default('📌') }}</span>
+          <div>{{ card.title }}</div>
+        </div>
+        {% endif %}
+        
+        <div class="card-body">
+          {{ card.body|safe }}
+        </div>
+
+        {% if card.code %}
+        <div class="code-block" style="margin-top: 14px;">
+          {{ card.code|safe }}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Slide 3 Case Study Takeaway Note -->
+    {% if slide_number == 3 %}
+    <div class="sticky-note sticky-lavender" style="margin-top: 8px;">
+      <div class="sticky-tape"></div>
+      <div class="sticky-header">
+        <span>💡</span>
+        <span>Senior Engineer Takeaway</span>
+      </div>
+      <div class="sticky-body">
+        High availability isn't about avoiding failure—hardware <i>will</i> fail. It is about designing decoupled layers so no single server, rack, or cloud region holds the fate of your business in its hands.
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-bar">
+    <div class="handle-text">@{{ handle }}</div>
+    <div class="swipe-hint">
+      <span>{{ footer_hint|default('Swipe for next step ➡️') }}</span>
+    </div>
+  </div>
+
+</body>
+</html>

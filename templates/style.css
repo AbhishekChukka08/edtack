@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fira+Code:wght@400;600;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================================================
+   THEME: DIGITAL ENGINEERING NOTEBOOK (Default Style)
+   ========================================================= */
+body, body.theme-notebook {
+  width: 1080px;
+  height: 1350px;
+  background-color: #FAF9F6;
+  background-image: 
+    linear-gradient(to right, #E8E6DF 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, #E8E6DF 1.5px, transparent 1.5px);
+  background-size: 36px 36px;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  color: #1E293B;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 46px;
+  position: relative;
+}
+
+/* Notebook Spiral / Top Header Bar */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 2px dashed #CBD5E1;
+  padding-bottom: 18px;
+}
+
+.notebook-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Kalam', cursive;
+  font-size: 21px;
+  font-weight: 700;
+  color: #0F172A;
+  background: #FFFFFF;
+  border: 2px solid #0F172A;
+  padding: 6px 18px;
+  border-radius: 20px;
+  box-shadow: 3px 3px 0px #0F172A;
+}
+
+.notebook-tag .icon {
+  font-size: 20px;
+}
+
+.slide-number {
+  font-family: 'Kalam', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  color: #475569;
+  background: #F1F5F9;
+  padding: 6px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #CBD5E1;
+}
+
+/* Content Area */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 20px 0 12px 0;
+  gap: 14px;
+}
+
+.category-tag {
+  font-family: 'Fira Code', monospace;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #2563EB;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.main-title {
+  font-family: 'Kalam', cursive;
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0F172A;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+}
+
+/* Pastel Highlighters */
+.highlight, .highlight-yellow {
+  background: linear-gradient(104deg, rgba(254, 240, 138, 0) 0.9%, rgba(254, 240, 138, 0.9) 2.4%, rgba(254, 240, 138, 0.7) 98%);
+  padding: 0 8px;
+  border-radius: 4px;
+  display: inline;
+}
+
+.highlight-mint {
+  background: linear-gradient(104deg, rgba(187, 247, 208, 0) 0.9%, rgba(187, 247, 208, 0.9) 2.4%, rgba(187, 247, 208, 0.7) 98%);
+  padding: 0 8px;
+  border-radius: 4px;
+  display: inline;
+}
+
+.highlight-coral {
+  background: linear-gradient(104deg, rgba(254, 202, 202, 0) 0.9%, rgba(254, 202, 202, 0.9) 2.4%, rgba(254, 202, 202, 0.7) 98%);
+  padding: 0 8px;
+  border-radius: 4px;
+  display: inline;
+}
+
+.highlight-blue {
+  background: linear-gradient(104deg, rgba(186, 230, 253, 0) 0.9%, rgba(186, 230, 253, 0.9) 2.4%, rgba(186, 230, 253, 0.7) 98%);
+  padding: 0 8px;
+  border-radius: 4px;
+  display: inline;
+}
+
+.subtitle {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 24px;
+  color: #475569;
+  line-height: 1.35;
+}
+
+/* Washi-Taped Sticky Notes */
+.sticky-note {
+  position: relative;
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin: 10px 0;
+  box-shadow: 3px 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.sticky-tape {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95px;
+  height: 24px;
+  background: rgba(226, 232, 240, 0.85);
+  backdrop-filter: blur(2px);
+  border: 1px dashed rgba(148, 163, 184, 0.5);
+  border-radius: 2px;
+}
+
+.sticky-yellow {
+  background: #FEF9C3;
+  border: 2px solid #FDE047;
+  transform: rotate(-0.4deg);
+}
+
+.sticky-mint {
+  background: #DCFCE7;
+  border: 2px solid #86EFAC;
+  transform: rotate(0.4deg);
+}
+
+.sticky-coral {
+  background: #FEE2E2;
+  border: 2px solid #FCA5A5;
+  transform: rotate(-0.3deg);
+}
+
+.sticky-lavender {
+  background: #EDE9FE;
+  border: 2px solid #C4B5FD;
+  transform: rotate(0.3deg);
+}
+
+.sticky-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Kalam', cursive;
+  font-size: 25px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 10px;
+}
+
+.sticky-body {
+  font-size: 20px;
+  color: #1E293B;
+  line-height: 1.6;
+}
+
+.sticky-body b {
+  color: #0F172A;
+}
+
+/* Diagram Container with Sketchy Whiteboard Border */
+.svg-diagram-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px 0;
+  width: 100%;
+}
+
+/* Excalidraw-Style Sketched Cards */
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.sketch-card {
+  background: #FFFFFF;
+  border: 2.5px solid #0F172A;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 5px 5px 0px #0F172A;
+}
+
+.sketch-card.accent-glow {
+  background: #F0FDF4;
+  border-color: #15803D;
+  box-shadow: 5px 5px 0px #15803D;
+}
+
+.sketch-card.alert-glow {
+  background: #FEF2F2;
+  border-color: #DC2626;
+  box-shadow: 5px 5px 0px #DC2626;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'Kalam', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 12px;
+}
+
+.card-body {
+  font-size: 21px;
+  color: #334155;
+  line-height: 1.65;
+}
+
+/* Comparison 2-Column Grid for Cheat Sheet */
+.cheat-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  width: 100%;
+}
+
+/* Code Snippet in Handwritten Tech Notebook */
+.code-block {
+  background: #0F172A;
+  border: 2px solid #000000;
+  border-radius: 12px;
+  padding: 20px 24px;
+  font-family: 'Fira Code', monospace;
+  font-size: 18px;
+  color: #F8FAFC;
+  line-height: 1.6;
+  box-shadow: 4px 4px 0px #0F172A;
+}
+
+.code-keyword { color: #F472B6; font-weight: 700; }
+.code-func { color: #38BDF8; }
+.code-string { color: #4ADE80; }
+.code-comment { color: #94A3B8; font-style: italic; }
+
+/* Hand-drawn Interview Question Card */
+.interview-card {
+  background: #FFFBEB;
+  border: 3px solid #D97706;
+  border-radius: 18px;
+  padding: 32px 36px;
+  box-shadow: 5px 5px 0px #D97706;
+}
+
+.interview-card .title {
+  font-family: 'Kalam', cursive;
+  font-size: 28px;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.interview-card .question-body {
+  font-size: 22px;
+  color: #1F2937;
+  line-height: 1.65;
+  margin-bottom: 22px;
+}
+
+.interview-card .options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.interview-card .option-box {
+  background: #FFFFFF;
+  border: 2px solid #B45309;
+  border-radius: 12px;
+  padding: 16px 22px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0F172A;
+  box-shadow: 3px 3px 0px #B45309;
+}
+
+/* Footer Bar with Hand-drawn Aesthetic */
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px dashed #CBD5E1;
+  padding-top: 18px;
+  width: 100%;
+}
+
+.handle-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 18px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.swipe-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Kalam', cursive;
+  font-size: 21px;
+  font-weight: 700;
+  color: #2563EB;
+}
