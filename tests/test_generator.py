@@ -45,6 +45,7 @@ def test_html_rendering(tmp_path, mock_carousel_data):
         html = f.read()
         assert "ENGINEERING CHEAT SHEET" in html
         assert "Redis <span class='highlight'>Cache-Aside</span>" in html
+        assert "mermaid" in html
 
 def test_caption_formatting(mock_carousel_data):
     caption_text = format_caption_text(mock_carousel_data['caption'], "Redis Cache-Aside")

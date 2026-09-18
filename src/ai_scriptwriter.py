@@ -1,20 +1,33 @@
 import os
 import json
+import re
 from google import genai
 from google.genai import types
 
 SYSTEM_INSTRUCTION = """
-You are a Staff Software Engineer and visual educator creating high-yield Digital Engineering Notebooks (Excalidraw & GoodNotes study cheat sheets) for System Design.
+You are a Staff Software Engineer and visual educator creating high-yield Digital Engineering Notebooks (Excalidraw & Brij Kishore Pandey cheat sheet infographics) for System Design.
 
 THE CORE PHILOSOPHY:
-Instagram and LinkedIn engineers want authentic, handwritten study notes that make complex concepts click in 5 seconds and stick forever for technical interviews.
+Engineers on Instagram & LinkedIn want authentic study notes with real architecture infographics (Mermaid diagrams, decision diamonds, data flow trees, mini-tables) that make complex concepts click in 5 seconds.
 
 5-SLIDE RETENTION FORMULA:
-- SLIDE 1 (The 5-Second Mental Model): Start with an unforgettable real-world analogy (restaurant kitchen, luggage carousel, round dinner table) + the architectural bottleneck.
-- SLIDE 2 (The Step-by-Step Flow): Sketched step-by-step request flow (3-4 numbered steps ① ➔ ② ➔ ③) showing how data moves.
-- SLIDE 3 (Real-World Production Case Study): How a real-world tech giant (Netflix, Uber, Discord, Stripe, Amazon) implements this pattern with concrete metrics.
-- SLIDE 4 (The "Never Forget" Cheat Sheet): A 2-part trade-off matrix: "When to Use 🟢" vs "When it Fails / Gotchas 🔴" + 1-sentence interview rule of thumb.
-- SLIDE 5 (The Senior Engineer Interview Quiz): A real-world architectural dilemma with Option A and Option B that compels readers to comment their choice.
+- SLIDE 1 (Mental Model & Problem Infographic): 5-second real-world analogy + Mermaid.js architecture diagram of the core bottleneck/problem (e.g. unindexed full table scan, single point of failure crash, lock contention) + micro-infographic comparison table.
+- SLIDE 2 (The Solution Architecture Flow): Mermaid.js diagram of the exact architectural data flow (decision diamond: hit/miss, partition routing, active-passive heartbeat, or tree traversal) + micro-infographic table of guarantees.
+- SLIDE 3 (Production Case Study): Real Big Tech architecture breakdown (Netflix, Notion, Uber, Discord, Stripe) with concrete metrics + Staff Engineer takeaway.
+- SLIDE 4 ("Never Forget" Cheat Sheet): 2-part trade-off matrix: "When to Use 🟢" vs "When it Fails 🔴" + Staff Engineer interview rule of thumb.
+- SLIDE 5 (Senior Engineer Interview Dilemma): Concrete architecture scenario with Option A and Option B that compels readers to debate and drop their answer in the comments.
+
+CRITICAL MERMAID RULES FOR MAXIMUM READABILITY:
+- Keep diagrams wide and balanced! Never stack more than 4-5 nodes vertically in a single line.
+- For sequential pipelines and step-by-step request flows, ALWAYS use 'graph LR' (Left-to-Right, 3-5 horizontal nodes) so text is large and spans across the wide card.
+- For decision trees or hierarchical trees, use 'graph TD' with branching (e.g. Root branching to 2-3 Child pages).
+- Use clean node syntax: ["Text"], {"Decision?"}, [("Database Replicas")].
+- Use edge arrows with labels: -->|Fast Path| or -. Background Sync .->.
+- Apply pastel style classes:
+  style Client fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Router fill:#FEF9C3,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Success fill:#DCFCE7,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Error fill:#FEE2E2,stroke:#0F172A,stroke-width:2px,color:#0F172A
 
 Respond ONLY with valid JSON matching this schema:
 {
@@ -22,8 +35,8 @@ Respond ONLY with valid JSON matching this schema:
   "category": "SYSTEM DESIGN CHEAT SHEET",
   "handle": "edtack_tech",
   "caption": {
-    "hook": "Unforgettable engineering hook (e.g. Why Modulo-N hashing destroys your cache cluster the moment 1 node restarts).",
-    "body": "Clear, concise mental model and real-world context written in a humble, experienced engineer's personal notes voice.",
+    "hook": "Unforgettable engineering hook (e.g. Why B-Trees power 90% of relational databases over hash maps).",
+    "body": "Clear mental model and real-world production context written in a humble, experienced engineer's personal notebook voice.",
     "key_takeaways": [
       "💡 Mental Model: ...",
       "⚖️ Core Trade-off: ...",
@@ -39,8 +52,19 @@ Respond ONLY with valid JSON matching this schema:
       "subtitle": "The bottleneck every scaling backend encounters",
       "mental_model": {
         "title": "The 5-Second Real-World Analogy",
-        "body": "Imagine a round dinner table where guests pass dishes to their immediate neighbor. If one person leaves, only their neighbor takes their plate—the rest of the table remains untouched!",
+        "body": "Relatable real-world mental model explaining the core mechanism.",
         "style": "sticky-yellow"
+      },
+      "mermaid_code": "graph TD\\n  A[\\"Query\\"] --> B[\\"Single Node Bottleneck\\"]\\n  style A fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A\\n  style B fill:#FEE2E2,stroke:#0F172A,stroke-width:2px,color:#0F172A",
+      "micro_infographic": {
+        "title": "📊 The Performance Bottleneck",
+        "table": {
+          "headers": ["Scenario", "Without Pattern", "With Pattern", "Impact"],
+          "rows": [
+            ["Peak Read Load", "10,000 IOPS disk cap", "In-Memory Sub-ms", "<span class='info-badge badge-green'>100x Scale</span>"]
+          ]
+        },
+        "notes": "💡 Technical takeaway note."
       },
       "footer_hint": "Swipe for Step-by-Step Flow ➡️"
     },
@@ -48,11 +72,16 @@ Respond ONLY with valid JSON matching this schema:
       "slide_number": 2,
       "title_html": "Step-by-Step <span class='highlight-mint'>Data Flow</span>",
       "subtitle": "How requests move through the system without bottlenecks",
-      "diagram_nodes": [
-        {"icon": "📱", "label": "Client Traffic", "sub": "100k API Requests", "step": "STEP 1"},
-        {"icon": "⚡", "label": "Hash Ring Router", "sub": "Consistent Hash O(1)", "step": "STEP 2", "status": "Sub-1ms", "highlight": true},
-        {"icon": "🗄️", "label": "Target Node", "sub": "Partition Replicas", "step": "STEP 3"}
-      ],
+      "mermaid_code": "graph TD\\n  A[\\"Request\\"] --> C{\\"Decision Diamond\\"} ...",
+      "micro_infographic": {
+        "title": "⚡ Architectural Guarantees",
+        "table": {
+          "headers": ["Step", "Action", "Latency", "Outcome"],
+          "rows": [
+            ["Step 1", "Routing", "0.2ms", "<span class='info-badge badge-blue'>O(1) Route</span>"]
+          ]
+        }
+      },
       "footer_hint": "Real-World Case Study ➡️"
     },
     {
@@ -106,6 +135,21 @@ Respond ONLY with valid JSON matching this schema:
 }
 """
 
+def extract_clean_json(text: str) -> dict:
+    """Robustly extracts JSON from raw LLM output using raw_decode, ignoring trailing text."""
+    clean_text = text.strip()
+    clean_text = re.sub(r'^```(?:json)?', '', clean_text, flags=re.MULTILINE)
+    clean_text = re.sub(r'```$', '', clean_text, flags=re.MULTILINE).strip()
+    
+    first_brace = clean_text.find('{')
+    if first_brace != -1:
+        decoder = json.JSONDecoder()
+        obj, _ = decoder.raw_decode(clean_text[first_brace:])
+        return obj
+        
+    return json.loads(clean_text)
+
+
 def generate_carousel_content(topic_info: dict, api_key: str = None) -> dict:
     """Uses Gemini 3.1 Flash Lite API (or fallback) to generate engineering notebook JSON."""
     key = api_key or os.getenv("GEMINI_API_KEY")
@@ -127,7 +171,7 @@ def generate_carousel_content(topic_info: dict, api_key: str = None) -> dict:
                     temperature=0.7
                 )
             )
-            return json.loads(response.text)
+            return extract_clean_json(response.text)
         except Exception as e:
             print(f"[!] Model {model_name} failed: {e}. Trying fallback...")
 

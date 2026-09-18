@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Slide {{ slide_number }}</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <style>
     {{ css_content|safe }}
   </style>
@@ -42,10 +43,55 @@
     </div>
     {% endif %}
 
-    <!-- Architecture Diagram (Prominent Center) -->
-    {% if diagram_svg %}
+    <!-- Dynamic Architecture Diagram (Mermaid or SVG) -->
+    {% if mermaid_code %}
+    <div class="mermaid-container">
+      <div class="mermaid-tag">📐 ARCHITECTURE INFOGRAPHIC</div>
+      <div class="mermaid">
+{{ mermaid_code|safe }}
+      </div>
+    </div>
+    {% elif diagram_svg %}
     <div class="svg-diagram-container">
       {{ diagram_svg|safe }}
+    </div>
+    {% endif %}
+
+    <!-- Micro-Infographic Component (Tables, Badges, Monospace notes) -->
+    {% if micro_infographic %}
+    <div class="micro-infographic">
+      {% if micro_infographic.title %}
+      <div style="font-family: 'Kalam', cursive; font-size: 20px; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
+        {{ micro_infographic.title }}
+      </div>
+      {% endif %}
+      
+      {% if micro_infographic.table %}
+      <table class="info-table">
+        <thead>
+          <tr>
+            {% for col in micro_infographic.table.headers %}
+            <th>{{ col }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in micro_infographic.table.rows %}
+          <tr>
+            {% for cell in row %}
+            <td>{{ cell|safe }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+
+      {% if micro_infographic.notes %}
+      <div style="font-size: 15px; font-weight: 600; color: #334155; margin-top: 8px; line-height: 1.5;">
+        {{ micro_infographic.notes|safe }}
+      </div>
+      {% endif %}
     </div>
     {% endif %}
 
@@ -155,5 +201,21 @@
     </div>
   </div>
 
+  <script>
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        fontFamily: 'Plus Jakarta Sans, sans-serif',
+        fontSize: 16,
+        securityLevel: 'loose',
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+          curve: 'basis'
+        }
+      });
+    }
+  </script>
 </body>
 </html>
