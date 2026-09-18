@@ -97,10 +97,48 @@ def mark_topic_completed(topic_id: str):
     with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
         history = json.load(f)
 
-    history.append({
-        "id": topic_id,
-        "completed_at": datetime.utcnow().isoformat()
-    })
-
     with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
         json.dump(history, f, indent=2)
+
+def get_upcoming_topics(count: int = 4, offset: int = 0) -> list[dict]:
+    """Returns the next 'count' uncompleted topics from queue starting at offset."""
+    init_state()
+    with open(QUEUE_FILE, 'r', encoding='utf-8') as f:
+        queue = json.load(f)
+    with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+        history = json.load(f)
+
+    completed_ids = {item['id'] for item in history}
+    remaining = [t for t in queue if t['id'] not in completed_ids]
+    
+    if not remaining:
+        return queue[:count]
+        
+    start_idx = offset % len(remaining)
+    selected = remaining[start_idx:start_idx + count]
+    if len(selected) < count:
+        selected.extend(remaining[:count - len(selected)])
+    return selected
+
+def get_topic_by_id(topic_id: str) -> dict | None:
+    """Finds a topic in queue by ID."""
+    init_state()
+    with open(QUEUE_FILE, 'r', encoding='utf-8') as f:
+        queue = json.load(f)
+    for topic in queue:
+        if topic['id'] == topic_id:
+            return topic
+    return None
+
+def create_custom_topic(topic_name: str) -> dict:
+    """Creates a custom topic entry from user prompt."""
+    import re
+    slug = re.sub(r'[^a-zA-Z0-9]+', '-', topic_name.strip().lower()).strip('-')[:50]
+    return {
+        "id": f"custom-{slug}",
+        "topic": topic_name.strip(),
+        "category": "System Design & Architecture",
+        "difficulty": "Intermediate",
+        "summary": f"User-requested topic: {topic_name}"
+    }
+

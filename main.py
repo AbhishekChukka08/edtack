@@ -16,7 +16,13 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Generate HTML and PNG slides without sending to Telegram")
     parser.add_argument("--theme", default="theme-notebook", choices=["theme-notebook", "white-infographic", "dark-slate"], help="Visual style theme")
     parser.add_argument("--output-dir", default="./output", help="Directory to save output files")
+    parser.add_argument("--serve", action="store_true", help="Start 24/7 interactive Telegram bot listener for button clicks & custom topics")
     args = parser.parse_args()
+
+    if args.serve:
+        from src.bot_listener import start_bot
+        start_bot()
+        return
 
     print("[*] Starting Daily Technical Carousel Generator ('edtack')...")
     

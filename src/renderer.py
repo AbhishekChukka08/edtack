@@ -135,7 +135,12 @@ async def convert_html_to_png_async(html_paths: list[str], output_dir: str) -> l
     return png_paths
 
 
-def generate_carousel_images(carousel_data: dict, output_dir: str, theme: str = "white-infographic") -> list[str]:
-    """Synchronous wrapper for generating carousel PNG slides."""
+async def generate_carousel_images_async(carousel_data: dict, output_dir: str, theme: str = "theme-notebook") -> list[str]:
+    """Asynchronous pipeline for generating carousel PNG slides."""
     html_paths = render_html_files(carousel_data, output_dir, theme=theme)
-    return asyncio.run(convert_html_to_png_async(html_paths, output_dir))
+    return await convert_html_to_png_async(html_paths, output_dir)
+
+
+def generate_carousel_images(carousel_data: dict, output_dir: str, theme: str = "theme-notebook") -> list[str]:
+    """Synchronous wrapper for generating carousel PNG slides."""
+    return asyncio.run(generate_carousel_images_async(carousel_data, output_dir, theme=theme))

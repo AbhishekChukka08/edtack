@@ -17,24 +17,22 @@ def format_caption_text(caption_data: dict, topic_title: str) -> str:
     )
     return text
 
-def build_interactive_keyboard() -> InlineKeyboardMarkup:
-    """Builds inline action buttons for Telegram review."""
-    keyboard = [
-        [
-            InlineKeyboardButton("✅ Approve & Post", callback_data="approve"),
-            InlineKeyboardButton("🔄 New Topic", callback_data="regen_topic")
-        ],
-        [
-            InlineKeyboardButton("🎨 Cyber-Neon", callback_data="theme_cyber-neon"),
-            InlineKeyboardButton("🎨 Clean-Light", callback_data="theme_clean-light"),
-            InlineKeyboardButton("🎨 Dark-Slate", callback_data="theme_dark-slate")
-        ]
-    ]
+def build_topic_selection_keyboard(suggested_topics: list[dict], offset: int = 0) -> InlineKeyboardMarkup:
+    """Builds interactive topic selection buttons."""
+    keyboard = []
+    for t in suggested_topics:
+        title = t.get("topic", "Topic")
+        btn_text = f"👉 {title[:32]}..." if len(title) > 35 else f"👉 {title}"
+        keyboard.append([InlineKeyboardButton(btn_text, callback_data=f"sel_{t['id']}")])
+        
+    keyboard.append([
+        InlineKeyboardButton("🔄 Next Suggestions", callback_data=f"page_{offset + 4}"),
+        InlineKeyboardButton("🎲 Pick Random", callback_data="sel_random")
+    ])
     return InlineKeyboardMarkup(keyboard)
 
 async def send_carousel_to_telegram_async(png_paths: list[str], caption_text: str, bot_token: str, chat_id: str):
-    """Sends 5 slides as photo album + full caption + interactive control buttons with extended timeout settings."""
-    # Extended timeout configuration for reliable media uploading
+    """Sends 5 slides as photo album + full caption + interactive topic picker."""
     request = HTTPXRequest(connect_timeout=60.0, read_timeout=60.0, write_timeout=60.0)
     bot = Bot(token=bot_token, request=request)
     
@@ -55,13 +53,19 @@ async def send_carousel_to_telegram_async(png_paths: list[str], caption_text: st
         text=f"📋 **Ready-to-Post Instagram Caption:**\n\n{caption_text}"
     )
 
-    # 3. Send interactive control panel buttons
-    print("[*] Sending control panel buttons...")
+    # 3. Send interactive topic selection panel
+    from src.state_manager import get_upcoming_topics
+    suggestions = get_upcoming_topics(count=4)
+    
+    print("[*] Sending topic selection buttons...")
     await bot.send_message(
         chat_id=chat_id,
-        text="🎛️ **Mobile Control Panel:** Tap below to approve assets or switch theme:",
+        text=(
+            "🎯 **Choose Next Topic to Generate:**\n\n"
+            "Tap any suggestion below, or **reply to this message with any custom topic** (e.g. _Distributed Locks_ or _WebSockets_):"
+        ),
         parse_mode="Markdown",
-        reply_markup=build_interactive_keyboard()
+        reply_markup=build_topic_selection_keyboard(suggestions, offset=0)
     )
 
 
