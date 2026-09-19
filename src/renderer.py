@@ -113,7 +113,8 @@ async def convert_html_to_png_async(html_paths: list[str], output_dir: str) -> l
         page = await browser.new_page(viewport={"width": 1080, "height": 1350}, device_scale_factor=2)
 
         for idx, html_path in enumerate(html_paths, start=1):
-            file_url = f"file:///{os.path.abspath(html_path).replace('\\', '/')}"
+            abs_path = os.path.abspath(html_path).replace('\\', '/')
+            file_url = f"file:///{abs_path}"
             await page.goto(file_url, wait_until="domcontentloaded")
             await page.wait_for_timeout(400)
             
