@@ -33,7 +33,7 @@ Respond ONLY with valid JSON matching this schema:
 {
   "topic_id": "string",
   "category": "SYSTEM DESIGN CHEAT SHEET",
-  "handle": "edtack_tech",
+  "handle": "edtack_edu",
   "caption": {
     "hook": "Unforgettable engineering hook (e.g. Why B-Trees power 90% of relational databases over hash maps).",
     "body": "Clear mental model and real-world production context written in a humble, experienced engineer's personal notebook voice.",

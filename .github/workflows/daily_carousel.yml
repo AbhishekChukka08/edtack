@@ -39,6 +39,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add state/history.json
+          git add state/
           git diff --staged --quiet || (git commit -m "chore: record completed topic in state [skip ci]" && git push)
 

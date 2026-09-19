@@ -90,7 +90,7 @@ def render_html_files(carousel_data: dict, output_dir: str, theme: str = "theme-
             "mermaid_code": mermaid_code,
             "micro_infographic": micro_infographic,
             "category": carousel_data.get('category', 'SYSTEM DESIGN CHEAT SHEET'),
-            "handle": carousel_data.get('handle', 'edtack_tech')
+            "handle": carousel_data.get('handle', 'edtack_edu')
         }
         
         html_content = template.render(**slide_ctx)

@@ -44,30 +44,36 @@ async def run_pipeline_for_topic(update: Update, context: ContextTypes.DEFAULT_T
     )
 
     try:
-        # Step 1: Script & Mermaid diagrams (non-blocking thread)
-        carousel_data = await asyncio.to_thread(generate_carousel_content, topic_info)
-        
-        await status_msg.edit_text(
-            f"🚀 *Generating:* `{topic_title}`\n\n_2/3: Rendering 5x 1080x1350 Mermaid infographics with Playwright..._",
-            parse_mode="Markdown"
-        )
-        
-        # Step 2: Render slides to PNG (async)
         output_dir = os.path.join(os.getcwd(), "output")
-        png_paths = await generate_carousel_images_async(carousel_data, output_dir, theme="theme-notebook")
-        
+        png_paths = []
+        caption_text = ""
+
+        # Primary: 5-Slide Infographic Image Generation (gemini-3.1-flash-lite-image)
+        try:
+            from src.infographic_generator import generate_infographic_carousel
+            await status_msg.edit_text(
+                f"🚀 *Generating:* `{topic_title}`\n\n_1/2: Generating 5 visual infographic cheat sheets with gemini-3.1-flash-lite-image..._",
+                parse_mode="Markdown"
+            )
+            png_paths, caption_text = await asyncio.to_thread(generate_infographic_carousel, topic_info, output_dir)
+        except Exception as img_err:
+            logger.warning(f"Image model fallback triggered: {img_err}")
+            await status_msg.edit_text(
+                f"🚀 *Generating:* `{topic_title}`\n\n_1/2: Writing engineering script & rendering 5x Mermaid infographics..._",
+                parse_mode="Markdown"
+            )
+            carousel_data = await asyncio.to_thread(generate_carousel_content, topic_info)
+            png_paths = await generate_carousel_images_async(carousel_data, output_dir, theme="theme-notebook")
+            caption_text = format_caption_text(carousel_data['caption'], topic_title)
+
         await status_msg.edit_text(
-            f"🚀 *Generating:* `{topic_title}`\n\n_3/3: Uploading slides, caption & next suggestions to chat..._",
+            f"🚀 *Generating:* `{topic_title}`\n\n_2/2: Uploading 5 slides, ready-to-post caption & next topic buttons to chat..._",
             parse_mode="Markdown"
         )
         
-        # Step 3: Deliver to Telegram (async)
-        caption_text = format_caption_text(carousel_data['caption'], topic_title)
+        # Deliver to Telegram
         await send_carousel_to_telegram_async(png_paths, caption_text, token, str(chat_id))
-        
-        # Mark completed
         mark_topic_completed(topic_info['id'])
-        
         await status_msg.delete()
         
     except Exception as e:

@@ -69,7 +69,7 @@ async def send_carousel_to_telegram_async(png_paths: list[str], caption_text: st
     )
 
 
-def send_to_telegram(png_paths: list[str], caption_data: dict, topic_title: str, bot_token: str = None, chat_id: str = None):
+def send_to_telegram(png_paths: list[str], caption_data_or_text, topic_title: str = "", bot_token: str = None, chat_id: str = None):
     """Synchronous wrapper to send slides and control panel to Telegram."""
     token = bot_token or os.getenv("TELEGRAM_BOT_TOKEN")
     cid = chat_id or os.getenv("TELEGRAM_CHAT_ID")
@@ -77,5 +77,10 @@ def send_to_telegram(png_paths: list[str], caption_data: dict, topic_title: str,
     if not token or not cid:
         raise ValueError("TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be configured.")
 
-    caption_text = format_caption_text(caption_data, topic_title)
+    if isinstance(caption_data_or_text, dict):
+        caption_text = format_caption_text(caption_data_or_text, topic_title)
+    else:
+        caption_text = str(caption_data_or_text)
+        
     asyncio.run(send_carousel_to_telegram_async(png_paths, caption_text, token, cid))
+
