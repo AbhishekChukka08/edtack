@@ -44,8 +44,8 @@ async def run_pipeline_for_topic(update: Update, context: ContextTypes.DEFAULT_T
     )
 
     try:
-        # Step 1: Script & Mermaid diagrams
-        carousel_data = generate_carousel_content(topic_info)
+        # Step 1: Script & Mermaid diagrams (non-blocking thread)
+        carousel_data = await asyncio.to_thread(generate_carousel_content, topic_info)
         
         await status_msg.edit_text(
             f"🚀 *Generating:* `{topic_title}`\n\n_2/3: Rendering 5x 1080x1350 Mermaid infographics with Playwright..._",

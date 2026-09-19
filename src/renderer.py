@@ -114,20 +114,22 @@ async def convert_html_to_png_async(html_paths: list[str], output_dir: str) -> l
 
         for idx, html_path in enumerate(html_paths, start=1):
             file_url = f"file:///{os.path.abspath(html_path).replace('\\', '/')}"
-            await page.goto(file_url, wait_until="networkidle")
+            await page.goto(file_url, wait_until="domcontentloaded")
+            await page.wait_for_timeout(400)
             
             # If slide has a Mermaid diagram, wait for vector rendering
             try:
                 mermaid_elem = await page.query_selector('.mermaid')
                 if mermaid_elem:
-                    await page.wait_for_selector('.mermaid svg', timeout=8000)
+                    await page.wait_for_selector('.mermaid svg', timeout=4000)
             except Exception as err:
                 print(f"[*] Note on Slide {idx} Mermaid rendering: {err}")
 
-            await page.wait_for_timeout(350)
+            await page.wait_for_timeout(200)
             
             png_path = os.path.join(output_dir, f"slide_{idx}.png")
             await page.screenshot(path=png_path, full_page=True, type="png")
+            print(f"[*] Rendered {png_path}")
             png_paths.append(png_path)
 
         await browser.close()
