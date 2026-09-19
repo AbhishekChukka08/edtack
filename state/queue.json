@@ -1,261 +1,212 @@
 [
   {
-    "id": "redis-cache-aside",
-    "topic": "Redis Cache-Aside Pattern",
-    "category": "Caching & Performance",
+    "id": "transformer-attention-qkv",
+    "topic": "Transformer Self-Attention & QKV Math",
+    "category": "Generative AI Architecture",
     "difficulty": "Intermediate",
-    "summary": "How applications safely fetch data from cache and fall back to database without stale reads."
+    "summary": "How Query, Key, and Value dot-products compute token attention in parallel with multi-head attention diagrams."
   },
   {
-    "id": "db-sharding-vs-partitioning",
-    "topic": "Database Sharding vs Horizontal Partitioning",
-    "category": "Database Architecture",
+    "id": "positional-encodings-rope",
+    "topic": "Positional Encodings: RoPE & ALiBi",
+    "category": "LLM Foundations",
     "difficulty": "Advanced",
-    "summary": "Distributing relational data across multiple physical database nodes to overcome single-server limits."
+    "summary": "Why transformers have no inherent token order and how Rotary Position Embeddings enable 1M+ context lengths."
   },
   {
-    "id": "kafka-vs-rabbitmq",
-    "topic": "Kafka vs RabbitMQ",
-    "category": "Messaging & Streaming",
-    "difficulty": "Intermediate",
-    "summary": "Log-based distributed streaming versus smart broker push messaging queues."
-  },
-  {
-    "id": "rate-limiting-algorithms",
-    "topic": "Token Bucket vs Leaky Bucket Rate Limiting",
-    "category": "API Gateway Patterns",
-    "difficulty": "Intermediate",
-    "summary": "Protecting backend microservices against traffic spikes and DDoS attacks."
-  },
-  {
-    "id": "consistent-hashing",
-    "topic": "Consistent Hashing in Distributed Caches",
-    "category": "Distributed Systems",
-    "difficulty": "Advanced",
-    "summary": "Minimizing cache re-mapping when nodes join or leave a cluster."
-  },
-  {
-    "id": "single-point-of-failure-ha",
-    "topic": "Eliminating Single Points of Failure (SPOF)",
-    "category": "High Availability",
-    "difficulty": "Intermediate",
-    "summary": "Building fault-tolerant systems using active-passive failover and load balancer pairs."
-  },
-  {
-    "id": "database-indexing-b-trees",
-    "topic": "How Database B-Tree Indexes Work",
-    "category": "Database Internals",
-    "difficulty": "Intermediate",
-    "summary": "Why B-Trees accelerate O(log N) lookups and how composite indexes optimize queries."
-  },
-  {
-    "id": "bloom-filters",
-    "topic": "Bloom Filters: Fast Set Membership",
-    "category": "Caching & Databases",
-    "difficulty": "Intermediate",
-    "summary": "How Cassandra and Redis use bit arrays and hashing to prevent unnecessary disk lookups for missing keys."
-  },
-  {
-    "id": "write-ahead-logging",
-    "topic": "Write-Ahead Logging (WAL) in Databases",
-    "category": "Database Internals",
-    "difficulty": "Intermediate",
-    "summary": "How Postgres and MySQL guarantee ACID crash recovery by appending transactions to sequential logs before updating disk pages."
-  },
-  {
-    "id": "reverse-proxy-vs-load-balancer",
-    "topic": "Reverse Proxy vs Load Balancer",
-    "category": "Networking & Infrastructure",
+    "id": "tokenization-bpe",
+    "topic": "Tokenization & Byte-Pair Encoding (BPE)",
+    "category": "LLM Foundations",
     "difficulty": "Beginner",
-    "summary": "The fundamental difference between NGINX acting as a reverse proxy and HAProxy distributing upstream traffic."
+    "summary": "Why LLMs struggle with character counting and arithmetic: subwords, byte fallbacks, and token vocabulary limits."
   },
   {
-    "id": "cap-theorem-in-practice",
-    "topic": "The CAP Theorem in Real Distributed Systems",
-    "category": "Distributed Systems",
+    "id": "kv-cache-mechanics",
+    "topic": "KV Cache (Key-Value Caching) Mechanics",
+    "category": "LLM Inference",
     "difficulty": "Intermediate",
-    "summary": "Why network partitions make 100% Availability and 100% Consistency impossible, and how DynamoDB vs Spanner choose."
+    "summary": "Why autoregressive generation latency compounds per token and how KV caching transforms O(N^2) compute into O(N)."
   },
   {
-    "id": "cdn-edge-caching",
-    "topic": "CDN Edge Caching & Invalidation",
-    "category": "Web Performance",
+    "id": "model-quantization-awq-gptq",
+    "topic": "Model Quantization: AWQ vs GPTQ vs GGUF",
+    "category": "Model Compression",
     "difficulty": "Intermediate",
-    "summary": "Serving dynamic content from 300+ PoPs globally with surrogate keys, stale-while-revalidate, and instant purge."
+    "summary": "Compressing 16-bit float model weights to 4-bit integers with zero perplexity loss to run 70B models locally."
   },
   {
-    "id": "distributed-locks-redlock",
-    "topic": "Distributed Locks with Redis (Redlock)",
-    "category": "Distributed Systems",
-    "difficulty": "Advanced",
-    "summary": "Preventing double-spending and duplicate cron executions across microservices with TTLs and fencing tokens."
+    "id": "modern-rag-pipeline",
+    "topic": "The Modern Production RAG Pipeline",
+    "category": "Retrieval-Augmented Generation",
+    "difficulty": "Beginner",
+    "summary": "End-to-end architecture: Ingestion vs Query Serving, Vector Databases, Chunking, and Context Synthesis."
   },
   {
-    "id": "two-phase-commit-vs-saga",
-    "topic": "Two-Phase Commit (2PC) vs Saga Pattern",
-    "category": "Microservices Architecture",
-    "difficulty": "Advanced",
-    "summary": "Why blocking 2PC transactions stall distributed systems and how compensating event sagas maintain eventual consistency."
-  },
-  {
-    "id": "circuit-breaker-pattern",
-    "topic": "The Circuit Breaker Pattern in Microservices",
-    "category": "Fault Tolerance",
+    "id": "document-chunking-strategies",
+    "topic": "Document Chunking Strategies for RAG",
+    "category": "RAG Engineering",
     "difficulty": "Intermediate",
-    "summary": "How Closed, Open, and Half-Open states stop cascading failures when downstream microservices degrade."
+    "summary": "Comparing Fixed-size, Semantic, Recursive, and Markdown AST chunking to optimize context boundaries."
   },
   {
-    "id": "websocket-vs-sse-vs-polling",
-    "topic": "WebSockets vs SSE vs Long Polling",
-    "category": "Real-Time Systems",
+    "id": "dense-vs-sparse-embeddings",
+    "topic": "Dense Embeddings vs Sparse BM25 Search",
+    "category": "Vector Search",
     "difficulty": "Intermediate",
-    "summary": "Comparing full-duplex TCP sockets, unidirectional HTTP streaming, and polling overhead for live chat and dashboards."
+    "summary": "Semantic meaning vs exact keyword matching: why pure vector similarity fails for IDs, acronyms, and product codes."
   },
   {
-    "id": "cqrs-event-sourcing",
-    "topic": "CQRS & Event Sourcing Architecture",
-    "category": "Software Architecture",
-    "difficulty": "Advanced",
-    "summary": "Separating write commands from read projections with an immutable event ledger for auditability and scale."
-  },
-  {
-    "id": "gossip-protocol",
-    "topic": "Gossip Protocol in Distributed Clusters",
-    "category": "Distributed Systems",
-    "difficulty": "Advanced",
-    "summary": "How peer-to-peer epidemic dissemination lets Cassandra and Consul discover node health without a central orchestrator."
-  },
-  {
-    "id": "lsm-trees-vs-b-trees",
-    "topic": "LSM-Trees vs B-Trees Storage Engines",
-    "category": "Storage Engines",
-    "difficulty": "Advanced",
-    "summary": "Why write-intensive systems like RocksDB and Cassandra prefer Log-Structured Merge trees over in-place B-Trees."
-  },
-  {
-    "id": "idempotency-keys",
-    "topic": "Idempotency Keys in Payment APIs",
-    "category": "API Reliability",
+    "id": "hybrid-search-rrf",
+    "topic": "Hybrid Search & Reciprocal Rank Fusion (RRF)",
+    "category": "RAG Engineering",
     "difficulty": "Intermediate",
-    "summary": "How Stripe and Uber prevent accidental double charges during network dropouts and aggressive client retries."
+    "summary": "Combining dense vector search and sparse keyword rankings to produce state-of-the-art retrieval accuracy."
   },
   {
-    "id": "vector-databases-hnsw",
-    "topic": "Vector Databases & HNSW Indexing",
+    "id": "hnsw-vector-indexing",
+    "topic": "Vector Indexing: HNSW vs IVF-Flat",
+    "category": "Vector Databases",
+    "difficulty": "Advanced",
+    "summary": "Hierarchical Navigable Small World graphs vs inverted file partitions for sub-10ms billion-vector search."
+  },
+  {
+    "id": "cross-encoder-reranking",
+    "topic": "Cross-Encoder Reranking in RAG",
+    "category": "RAG Optimization",
+    "difficulty": "Intermediate",
+    "summary": "Why bi-encoders miss subtle nuances and how cross-encoder models (Cohere/BGE) filter top-K retrieval noise."
+  },
+  {
+    "id": "contextual-and-late-chunking",
+    "topic": "Contextual Retrieval & Late Chunking",
+    "category": "RAG Optimization",
+    "difficulty": "Advanced",
+    "summary": "Anthropic contextual embeddings and late chunking: injecting global document context before chunk vectorization."
+  },
+  {
+    "id": "query-rewriting-multi-query",
+    "topic": "Query Rewriting & Multi-Query Expansion",
+    "category": "Query Transformation",
+    "difficulty": "Intermediate",
+    "summary": "Using LLMs to expand ambiguous user questions into multiple diverse search queries to maximize recall."
+  },
+  {
+    "id": "parent-child-hierarchical-retrieval",
+    "topic": "Parent-Child & Hierarchical Retrieval",
+    "category": "RAG Engineering",
+    "difficulty": "Intermediate",
+    "summary": "Indexing small sentence-level child chunks for search accuracy, returning full parent sections to the LLM."
+  },
+  {
+    "id": "corrective-rag-crag",
+    "topic": "Corrective RAG (CRAG) & Self-RAG",
+    "category": "Advanced RAG",
+    "difficulty": "Advanced",
+    "summary": "Evaluating retrieved chunk confidence with grading loops and triggering web search fallbacks when confidence is low."
+  },
+  {
+    "id": "graphrag-knowledge-graphs",
+    "topic": "GraphRAG: Knowledge Graph Retrieval",
+    "category": "Advanced RAG",
+    "difficulty": "Advanced",
+    "summary": "Extracting entities and community summaries with LLMs to answer complex multi-hop global questions."
+  },
+  {
+    "id": "semantic-caching-llm",
+    "topic": "Semantic Caching with Redis & GPTCache",
+    "category": "LLM Cost Optimization",
+    "difficulty": "Intermediate",
+    "summary": "Caching LLM responses by vector similarity distance to eliminate 80% of API bills and achieve 5ms latencies."
+  },
+  {
+    "id": "metadata-filtering-rbac",
+    "topic": "Metadata Filtering & Multi-Tenant RAG",
+    "category": "Enterprise AI",
+    "difficulty": "Intermediate",
+    "summary": "Pre-filtering vs post-filtering predicates for enterprise role-based access control (RBAC) in vector databases."
+  },
+  {
+    "id": "react-pattern-tool-calling",
+    "topic": "The ReAct Pattern & Function Calling Internals",
+    "category": "Agentic AI",
+    "difficulty": "Intermediate",
+    "summary": "Reason + Act loops: how LLMs emit structured tool payloads, wait for API execution, and synthesize answers."
+  },
+  {
+    "id": "agentic-memory-architectures",
+    "topic": "Agentic Memory: Buffer, Summary & Vector Memory",
+    "category": "Agentic AI",
+    "difficulty": "Intermediate",
+    "summary": "How autonomous agents maintain short-term working context, rolling summaries, and long-term episodic vector recall."
+  },
+  {
+    "id": "agentic-planning-reflexion",
+    "topic": "Agentic Planning & Self-Correction (Reflexion)",
+    "category": "Agentic AI",
+    "difficulty": "Advanced",
+    "summary": "Tree-of-Thoughts and verbal reinforcement: how agents detect errors, critique failed tool outputs, and replan."
+  },
+  {
+    "id": "multi-agent-orchestrator-swarms",
+    "topic": "Multi-Agent Architectures & Orchestrator Swarms",
+    "category": "Agentic Systems",
+    "difficulty": "Advanced",
+    "summary": "Specialized subagents (Researcher, Coder, Critic) coordinated by an orchestrator router to solve complex goals."
+  },
+  {
+    "id": "human-in-the-loop-langgraph",
+    "topic": "Human-in-the-Loop State Checkpointing",
+    "category": "Agentic Systems",
+    "difficulty": "Intermediate",
+    "summary": "Using state machine checkpointing to pause agent workflows for human approval on irreversible actions."
+  },
+  {
+    "id": "model-context-protocol-mcp",
+    "topic": "Model Context Protocol (MCP) Architecture",
     "category": "AI Infrastructure",
     "difficulty": "Intermediate",
-    "summary": "How Hierarchical Navigable Small World graphs enable sub-10ms similarity search across millions of embeddings."
+    "summary": "The open standard for connecting AI clients to local and remote tool servers, resources, and enterprise systems."
   },
   {
-    "id": "database-connection-pooling",
-    "topic": "Database Connection Pooling Internals",
-    "category": "Backend Performance",
-    "difficulty": "Intermediate",
-    "summary": "Why raw TCP/TLS handshakes cripple databases and how HikariCP maintains pre-warmed connection pools."
-  },
-  {
-    "id": "kafka-partition-ordering",
-    "topic": "Message Ordering Guarantees in Apache Kafka",
-    "category": "Streaming & Messaging",
-    "difficulty": "Intermediate",
-    "summary": "Partition keys, consumer group rebalancing, and why total global ordering is an anti-pattern at scale."
-  },
-  {
-    "id": "database-replication-lag",
-    "topic": "Solving Database Replication Lag",
-    "category": "Database Architecture",
-    "difficulty": "Intermediate",
-    "summary": "Techniques like read-your-own-writes sticky sessions and monotonic read consistency with primary-replica topologies."
-  },
-  {
-    "id": "optimistic-vs-pessimistic-locking",
-    "topic": "Optimistic vs Pessimistic Locking",
-    "category": "Concurrency & Data",
-    "difficulty": "Intermediate",
-    "summary": "Using version numbers vs SELECT FOR UPDATE to prevent race conditions in ticketing and inventory checkouts."
-  },
-  {
-    "id": "api-gateway-pattern",
-    "topic": "The API Gateway Pattern",
-    "category": "Microservices Architecture",
-    "difficulty": "Intermediate",
-    "summary": "Centralizing auth tokens, SSL termination, rate limiting, and request routing at the perimeter."
-  },
-  {
-    "id": "blue-green-vs-canary-deployments",
-    "topic": "Blue-Green vs Canary Deployments",
-    "category": "DevOps & SRE",
-    "difficulty": "Intermediate",
-    "summary": "Zero-downtime microservice rollouts: switching 100% traffic instantly vs gradual 5% canary rollouts with telemetry guards."
-  },
-  {
-    "id": "raft-consensus-algorithm",
-    "topic": "Raft Distributed Consensus Explained",
-    "category": "Distributed Systems",
+    "id": "vllm-paged-attention",
+    "topic": "vLLM & PagedAttention Internals",
+    "category": "High-Performance Serving",
     "difficulty": "Advanced",
-    "summary": "How etcd and Kubernetes maintain strong consistency through leader election, term counters, and log replication."
+    "summary": "How virtual memory paging eliminates 80% of GPU memory fragmentation in continuous high-throughput LLM serving."
   },
   {
-    "id": "distributed-tracing-opentelemetry",
-    "topic": "Distributed Tracing with OpenTelemetry",
-    "category": "Observability",
-    "difficulty": "Intermediate",
-    "summary": "Propagating trace context and correlation IDs across 50 microservices to pinpoint multi-second latency spikes."
-  },
-  {
-    "id": "dead-letter-queues-backoff",
-    "topic": "Dead Letter Queues (DLQ) & Exponential Backoff",
-    "category": "Resilient Messaging",
-    "difficulty": "Intermediate",
-    "summary": "Isolating poisoned payloads and preventing retry storms with randomized jitter in async event loops."
-  },
-  {
-    "id": "database-isolation-levels-mvcc",
-    "topic": "Database Isolation Levels & MVCC",
-    "category": "Database Internals",
+    "id": "continuous-batching-prefill",
+    "topic": "Continuous Batching & Chunked Prefill",
+    "category": "High-Performance Serving",
     "difficulty": "Advanced",
-    "summary": "Dirty reads, non-repeatable reads, phantom reads, and Multi-Version Concurrency Control in PostgreSQL."
+    "summary": "Dynamically slotting new requests into ongoing token generation cycles to maximize GPU compute saturation."
   },
   {
-    "id": "geohashing-spatial-indexing",
-    "topic": "Geohashing & Spatial Indexing in Uber & Yelp",
-    "category": "System Design",
+    "id": "speculative-decoding",
+    "topic": "Speculative Decoding: 3x Faster Generation",
+    "category": "LLM Acceleration",
     "difficulty": "Intermediate",
-    "summary": "Converting latitude and longitude coordinates into base32 bounding boxes and QuadTrees for ultra-fast nearby queries."
+    "summary": "Using a lightweight draft model to generate candidate tokens and a target LLM to verify them in one forward pass."
   },
   {
-    "id": "dns-resolution-lifecycle",
-    "topic": "The Complete DNS Resolution Flow",
-    "category": "Networking",
-    "difficulty": "Beginner",
-    "summary": "From browser cache to Recursive Resolver, Root Server, TLD Server, and Authoritative Nameserver."
-  },
-  {
-    "id": "http3-and-quic",
-    "topic": "HTTP/3 and QUIC: Fixing TCP Head-of-Line Blocking",
-    "category": "Web Protocols",
+    "id": "peft-lora-qlora",
+    "topic": "Parameter-Efficient Fine-Tuning: LoRA & QLoRA",
+    "category": "Model Adaptation",
     "difficulty": "Intermediate",
-    "summary": "Why the web moved from TCP to UDP-based QUIC for 0-RTT handshakes and zero packet-loss connection stalls."
+    "summary": "Freezing base model weights and training low-rank adapter matrices (A x B) on consumer GPUs."
   },
   {
-    "id": "thundering-herd-cache-stampede",
-    "topic": "Preventing the Thundering Herd Problem",
-    "category": "Caching & Performance",
-    "difficulty": "Intermediate",
-    "summary": "What happens when hot cache keys expire simultaneously, and how mutex locking and probabilistic early recomputation solve it."
-  },
-  {
-    "id": "backpressure-in-streaming",
-    "topic": "Backpressure in Streaming Systems",
-    "category": "Reactive Systems",
-    "difficulty": "Intermediate",
-    "summary": "How downstream consumers signal upstream producers to slow down, preventing fatal Out-Of-Memory buffer crashes."
-  },
-  {
-    "id": "zero-copy-architecture",
-    "topic": "Zero-Copy Architecture in High-Throughput I/O",
-    "category": "OS & Networking",
+    "id": "dpo-vs-rlhf-alignment",
+    "topic": "Direct Preference Optimization (DPO) vs RLHF",
+    "category": "Model Alignment",
     "difficulty": "Advanced",
-    "summary": "How Kafka and NGINX bypass user-space memory buffers using Linux sendfile() to achieve gigabit disk-to-network speeds."
+    "summary": "Direct mathematical optimization on preference pairs without the complexity of training unstable reward models."
+  },
+  {
+    "id": "rag-evaluation-triad-ragas",
+    "topic": "The RAG Triad & Automated Evaluation (Ragas)",
+    "category": "AI Evaluation",
+    "difficulty": "Intermediate",
+    "summary": "Quantifying Context Relevance, Groundedness (Faithfulness), and Answer Relevance using LLM-as-a-Judge."
   }
 ]

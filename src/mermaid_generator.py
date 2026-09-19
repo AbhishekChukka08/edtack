@@ -28,6 +28,128 @@ def clean_mermaid_code(raw_code: str) -> str:
 
 
 FALLBACK_MERMAID_LIBRARY = {
+    "transformer-attention-qkv": {
+        "slide_1": {
+            "mermaid": """graph TD
+  Input["🔤 Input Tokens: ['The', 'robot', 'saw', 'the', 'cat']"] --> Embed["Vector Embeddings (d_model = 4096)"]
+  Embed --> WQ["Query Projection (W_Q)"]
+  Embed --> WK["Key Projection (W_K)"]
+  Embed --> WV["Value Projection (W_V)"]
+  WQ --> Dot["(Q · K^T) / sqrt(d_k)"]
+  WK --> Dot
+  Dot --> Softmax["Softmax (Attention Probabilities)"]
+  Softmax --> Out["Contextual Output = Attention · V"]
+  WV --> Out
+  
+  style Input fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Embed fill:#FEF9C3,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style WQ fill:#F8FAFC,stroke:#0F172A,stroke-width:1.5px,color:#0F172A
+  style WK fill:#F8FAFC,stroke:#0F172A,stroke-width:1.5px,color:#0F172A
+  style WV fill:#F8FAFC,stroke:#0F172A,stroke-width:1.5px,color:#0F172A
+  style Softmax fill:#EDE9FE,stroke:#7C3AED,stroke-width:2px,color:#5B21B6
+  style Out fill:#DCFCE7,stroke:#16A34A,stroke-width:2.5px,color:#166534""",
+            "micro_infographic": {
+                "title": "🧠 The Q, K, V Mental Model",
+                "table": {
+                    "headers": ["Component", "Mathematical Role", "Real-World Analogy", "Dimensions"],
+                    "rows": [
+                        ["Query (Q)", "What token seeks", "Search bar query", "<span class='info-badge badge-blue'>[seq, d_k]</span>"],
+                        ["Key (K)", "What token contains", "YouTube video tags", "<span class='info-badge badge-yellow'>[seq, d_k]</span>"],
+                        ["Value (V)", "Information payload", "Actual video content", "<span class='info-badge badge-green'>[seq, d_v]</span>"]
+                    ]
+                },
+                "notes": "💡 Without Q, K, V projections, tokens would only match identical words. Projections allow words like 'king' and 'queen' to attend to each other across semantic space."
+            }
+        },
+        "slide_2": {
+            "mermaid": """graph LR
+  Q["Token: 'bank' (Query)"] --> Dot["Dot Product (Q · K)"]
+  K1["Key: 'river'"] -->|Score: 0.92| Dot
+  K2["Key: 'money'"] -->|Score: 0.05| Dot
+  Dot --> Softmax["Softmax Weights"]
+  Softmax --> WeightedSum["Weighted Value Sum"]
+  V1["Value: 'river water'"] --> WeightedSum
+  WeightedSum --> Result["Context Vector: Geographical Bank"]
+  
+  style Q fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Dot fill:#FEF9C3,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Softmax fill:#EDE9FE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style WeightedSum fill:#DCFCE7,stroke:#16A34A,stroke-width:2.5px,color:#166534
+  style Result fill:#DCFCE7,stroke:#16A34A,stroke-width:2.5px,color:#166534""",
+            "micro_infographic": {
+                "title": "⚡ 4-Step Self-Attention Calculation",
+                "table": {
+                    "headers": ["Step", "Formula", "Operation", "Hardware Speed"],
+                    "rows": [
+                        ["1. Compatibility", "S = Q · K^T", "Matrix multiplication (GEMM)", "<span class='info-badge badge-green'>Tensor Core O(N^2)</span>"],
+                        ["2. Scale", "S / sqrt(d_k)", "Prevents softmax saturation", "<span class='info-badge badge-blue'>Element-wise</span>"],
+                        ["3. Probability", "A = Softmax(S)", "Row-wise normalization (sum=1)", "<span class='info-badge badge-yellow'>Softmax kernel</span>"],
+                        ["4. Context Mix", "Output = A · V", "Weighted semantic blend", "<span class='info-badge badge-green'>Tensor Core</span>"]
+                    ]
+                },
+                "notes": "📌 Multi-head attention repeats this process 32 to 128 times in parallel, allowing the model to simultaneously attend to syntax, grammar, and long-range facts."
+            }
+        }
+    },
+    "modern-rag-pipeline": {
+        "slide_1": {
+            "mermaid": """graph TD
+  User["👤 User Question"] --> DirectLLM["🤖 Pure LLM (Static Pre-training)"]
+  DirectLLM --> Hallucination["🚨 Hallucination / Outdated Data (Knowledge Cutoff)"]
+  
+  User --> HybridRAG["⚡ RAG Pipeline (Retrieve + Augment)"]
+  HybridRAG --> Grounded["✅ Grounded Answer with Exact Citations"]
+  
+  style User fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style DirectLLM fill:#FEE2E2,stroke:#0F172A,stroke-width:2px,color:#991B1B
+  style Hallucination fill:#FEF2F2,stroke:#DC2626,stroke-width:2px,color:#991B1B
+  style HybridRAG fill:#DCFCE7,stroke:#0F172A,stroke-width:2px,color:#166534
+  style Grounded fill:#DCFCE7,stroke:#16A34A,stroke-width:2.5px,color:#166534""",
+            "micro_infographic": {
+                "title": "📊 Why RAG Beats Pure LLMs",
+                "table": {
+                    "headers": ["Feature", "Direct LLM Prompting", "RAG Pipeline", "Advantage"],
+                    "rows": [
+                        ["Knowledge Cutoff", "Frozen at training date", "Real-time (live databases)", "<span class='info-badge badge-green'>Always Current</span>"],
+                        ["Hallucination Rate", "15% - 30% on niche facts", "< 2% with citation grounding", "<span class='info-badge badge-green'>Audit-Ready</span>"],
+                        ["Private Enterprise Data", "Requires costly fine-tuning", "Instant vector search indexing", "<span class='info-badge badge-green'>Zero Retraining</span>"]
+                    ]
+                }
+            }
+        },
+        "slide_2": {
+            "mermaid": """graph LR
+  Doc["📄 Raw Docs"] --> Chunk["✂️ Chunking (512 tokens)"]
+  Chunk --> Embed["📐 Embedding Model"]
+  Embed --> VDB[("🗄️ Vector Database")]
+  
+  Query["🔍 User Query"] --> QEmbed["Embedding"]
+  QEmbed --> Search["Cosine Similarity"]
+  VDB --> Search
+  Search --> TopK["Top-K Chunks"]
+  TopK --> Synth["🤖 LLM Context Synthesis"]
+  Query --> Synth
+  Synth --> Answer["💬 Grounded Response"]
+  
+  style Doc fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style VDB fill:#FEF9C3,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style Query fill:#DBEAFE,stroke:#0F172A,stroke-width:2px,color:#0F172A
+  style TopK fill:#EDE9FE,stroke:#0F172A,stroke-width:2px,color:#5B21B6
+  style Synth fill:#DCFCE7,stroke:#0F172A,stroke-width:2px,color:#166534
+  style Answer fill:#DCFCE7,stroke:#16A34A,stroke-width:2.5px,color:#166534""",
+            "micro_infographic": {
+                "title": "⚡ RAG Pipeline SLA Targets",
+                "table": {
+                    "headers": ["Stage", "Typical Tool", "Latency SLA", "Bottleneck"],
+                    "rows": [
+                        ["Vector Retrieval", "Pinecone / Qdrant / Milvus", "5ms - 25ms", "Index size / HNSW graph"],
+                        ["Reranking", "Cohere / BGE Cross-Encoder", "40ms - 80ms", "Model FLOPs per chunk"],
+                        ["LLM Generation", "Gemini / Claude / GPT-4", "400ms - 1200ms", "Time to First Token (TTFT)"]
+                    ]
+                }
+            }
+        }
+    },
     "database-indexing-b-trees": {
         "slide_1": {
             "mermaid": """graph TD
