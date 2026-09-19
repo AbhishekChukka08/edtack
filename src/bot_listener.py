@@ -20,11 +20,50 @@ from src.state_manager import (
     get_upcoming_topics,
     get_topic_by_id,
     create_custom_topic,
-    mark_topic_completed
+    mark_topic_completed,
+    get_curriculum_status
 )
 from src.ai_scriptwriter import generate_carousel_content
 from src.renderer import generate_carousel_images_async
 from src.telegram_bot import send_carousel_to_telegram_async, format_caption_text, build_topic_selection_keyboard
+
+def build_curriculum_view(page: int = 1) -> tuple[str, InlineKeyboardMarkup]:
+    """Builds a paginated visual curriculum display with selection buttons."""
+    items, total_items, total_pages, current_page = get_curriculum_status(page=page, page_size=5)
+    
+    text_lines = [
+        f"📚 *Generative AI & LLM Systems Curriculum*",
+        f"_Track Overview: Page {current_page} of {total_pages} ({total_items} Topics total)_\n"
+    ]
+    
+    keyboard = []
+    for item in items:
+        status_icon = "✅" if item["completed"] else "⏳"
+        status_text = "Done" if item["completed"] else "Pending"
+        text_lines.append(f"{status_icon} *Day {item['index']}:* {item['topic']}\n   _Category: {item['category']} • {status_text}_")
+        
+        btn_label = f"{status_icon} Day {item['index']}: {item['topic'][:24]}..." if len(item['topic']) > 26 else f"{status_icon} Day {item['index']}: {item['topic']}"
+        keyboard.append([InlineKeyboardButton(btn_label, callback_data=f"sel_{item['id']}")])
+        
+    text_lines.append("\n👉 *Tap any topic button to generate its 5-slide visual carousel now:*")
+    
+    # Navigation row
+    nav_row = []
+    if current_page > 1:
+        nav_row.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"cur_page_{current_page - 1}"))
+    nav_row.append(InlineKeyboardButton(f"📄 {current_page}/{total_pages}", callback_data="noop"))
+    if current_page < total_pages:
+        nav_row.append(InlineKeyboardButton("Next ➡️", callback_data=f"cur_page_{current_page + 1}"))
+    keyboard.append(nav_row)
+    
+    # Action row
+    keyboard.append([
+        InlineKeyboardButton("🚀 Generate Next in Track", callback_data="sel_next"),
+        InlineKeyboardButton("🎲 Pick Random", callback_data="sel_random")
+    ])
+    
+    return "\n".join(text_lines), InlineKeyboardMarkup(keyboard)
+
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
@@ -87,12 +126,26 @@ async def handle_callback_query(update: Update, context: ContextTypes.DEFAULT_TY
     await query.answer()
     data = query.data
 
-    if data.startswith("sel_"):
+    if data == "noop":
+        await query.answer()
+        return
+
+    elif data.startswith("cur_page_"):
+        try:
+            page_num = int(data[9:])
+        except ValueError:
+            page_num = 1
+        text, markup = build_curriculum_view(page=page_num)
+        await query.edit_message_text(text=text, parse_mode="Markdown", reply_markup=markup)
+
+    elif data.startswith("sel_"):
         topic_key = data[4:]
         
         if topic_key == "random":
             topics = get_upcoming_topics(count=10)
             topic_info = random.choice(topics) if topics else get_next_topic()
+        elif topic_key == "next":
+            topic_info = get_next_topic()
         else:
             topic_info = get_topic_by_id(topic_key)
             if not topic_info:
@@ -136,12 +189,21 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Command /start handler."""
     suggestions = get_upcoming_topics(count=4)
     await update.message.reply_text(
-        "👋 **Welcome to your Digital Engineering Notebook Assistant!**\n\n"
-        "Every day, I turn complex system design concepts into 5-slide visual cheat sheets with Mermaid diagrams.\n\n"
-        "🎯 **Pick a topic to generate right now, or type any topic directly:**",
+        "👋 **Welcome to your Digital Engineering Notebook Assistant (@edtack_edu)!**\n\n"
+        "Commands:\n"
+        "• `/generate` - Generate next topic in the curriculum track\n"
+        "• `/curriculum` - View full 30-day curriculum & select any topic to generate\n"
+        "• Or **reply directly with any custom topic** (e.g. _GraphRAG_ or _vLLM_)\n\n"
+        "🎯 **Upcoming suggestions:**",
         parse_mode="Markdown",
         reply_markup=build_topic_selection_keyboard(suggestions, offset=0)
     )
+
+
+async def cmd_curriculum(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Command /curriculum or /topics handler to list and pick from full curriculum."""
+    text, markup = build_curriculum_view(page=1)
+    await update.message.reply_text(text=text, parse_mode="Markdown", reply_markup=markup)
 
 
 async def cmd_next(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -156,13 +218,17 @@ def start_bot():
     if not token:
         raise ValueError("TELEGRAM_BOT_TOKEN is not set in environment.")
 
-    print("[*] Starting Interactive Telegram Bot Listener for 'edtack'...")
+    print("[*] Starting Interactive Telegram Bot Listener for 'edtack' (@edtack_edu)...")
     app = Application.builder().token(token).build()
 
     app.add_handler(CommandHandler("start", cmd_start))
     app.add_handler(CommandHandler("help", cmd_start))
     app.add_handler(CommandHandler("next", cmd_next))
     app.add_handler(CommandHandler("generate", cmd_next))
+    app.add_handler(CommandHandler("curriculum", cmd_curriculum))
+    app.add_handler(CommandHandler("topics", cmd_curriculum))
+    app.add_handler(CommandHandler("list", cmd_curriculum))
+    app.add_handler(CommandHandler("track", cmd_curriculum))
     app.add_handler(CallbackQueryHandler(handle_callback_query))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_text))
 

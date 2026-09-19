@@ -97,8 +97,48 @@ def mark_topic_completed(topic_id: str):
     with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
         history = json.load(f)
 
+    if not any(item['id'] == topic_id for item in history):
+        history.append({
+            "id": topic_id,
+            "completed_at": datetime.utcnow().isoformat() + "Z"
+        })
+
     with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
         json.dump(history, f, indent=2)
+
+def get_curriculum_status(page: int = 1, page_size: int = 5) -> tuple[list[dict], int, int, int]:
+    """Returns paginated curriculum items with completion flags.
+    Returns: (items_for_page, total_items, total_pages, current_page)
+    """
+    init_state()
+    with open(QUEUE_FILE, 'r', encoding='utf-8') as f:
+        queue = json.load(f)
+    with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+        history = json.load(f)
+
+    completed_ids = {item['id'] for item in history}
+    
+    annotated = []
+    for idx, t in enumerate(queue, start=1):
+        is_done = t['id'] in completed_ids
+        annotated.append({
+            "index": idx,
+            "id": t['id'],
+            "topic": t['topic'],
+            "category": t.get('category', 'Generative AI'),
+            "completed": is_done
+        })
+        
+    total_items = len(annotated)
+    total_pages = max(1, (total_items + page_size - 1) // page_size)
+    page = max(1, min(page, total_pages))
+    
+    start = (page - 1) * page_size
+    end = start + page_size
+    items_for_page = annotated[start:end]
+    
+    return items_for_page, total_items, total_pages, page
+
 
 def get_upcoming_topics(count: int = 4, offset: int = 0) -> list[dict]:
     """Returns the next 'count' uncompleted topics from queue starting at offset."""
