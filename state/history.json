@@ -2,5 +2,9 @@
   {
     "id": "transformer-attention-qkv",
     "completed_at": "2026-09-19T08:52:53.667080Z"
+  },
+  {
+    "id": "positional-encodings-rope",
+    "completed_at": "2026-09-19T17:22:48.795049Z"
   }
 ]
