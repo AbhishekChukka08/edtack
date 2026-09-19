@@ -1,8 +1,11 @@
 import os
 import json
 import re
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
+load_dotenv()
 
 SYSTEM_INSTRUCTION = """
 You are a Staff Software Engineer and visual educator creating high-yield Digital Engineering Notebooks (Excalidraw & Brij Kishore Pandey cheat sheet infographics) for System Design.
@@ -175,4 +178,86 @@ def generate_carousel_content(topic_info: dict, api_key: str = None) -> dict:
         except Exception as e:
             print(f"[!] Model {model_name} failed: {e}. Trying fallback...")
 
-    raise RuntimeError("All Gemini models failed to generate content.")
+    print("[!] All Gemini models hit spending cap or failed. Using structured engineering notebook template fallback...")
+    return build_fallback_carousel_data(topic_info)
+
+
+def build_fallback_carousel_data(topic_info: dict) -> dict:
+    title = topic_info.get("topic", "System Architecture")
+    summary = topic_info.get("summary", "Technical cheat sheet breakdown.")
+    cat = topic_info.get("category", "Generative AI Architecture")
+    topic_id = topic_info.get("id", "custom-topic")
+    
+    return {
+        "topic_id": topic_id,
+        "category": cat,
+        "handle": "edtack_edu",
+        "caption": {
+            "hook": f"How {title} works in modern high-scale AI systems.",
+            "body": f"When building production architectures, understanding {title} is critical. Here is your visual cheat sheet breakdown.",
+            "key_takeaways": [
+                f"💡 Core Mechanism: {summary}",
+                "⚖️ Production Trade-Off: High throughput vs resource footprint",
+                "🎯 Staff Rule: Always benchmark real workloads before optimizing"
+            ],
+            "call_to_action": "What's your answer to the Slide 5 dilemma? Drop A or B below! 👇",
+            "hashtags": ["systemdesign", "genai", "softwareengineering", "deeplearning", "edtack_edu"]
+        },
+        "slides": [
+            {
+                "slide_number": 1,
+                "title_html": f"{title} <span class='highlight-yellow'>Explained Simply</span>",
+                "subtitle": "The fundamental concept every engineer should master",
+                "mental_model": {
+                    "title": "The 5-Second Mental Model",
+                    "body": summary,
+                    "style": "sticky-yellow"
+                },
+                "footer_hint": "Swipe for Architectural Flow ➡️"
+            },
+            {
+                "slide_number": 2,
+                "title_html": "Step-by-Step <span class='highlight-mint'>Execution Flow</span>",
+                "subtitle": "How data moves through the architecture",
+                "diagram_nodes": [
+                    {"icon": "📥", "label": "Input Data", "sub": "Raw Request / Embeddings", "step": "STEP 1"},
+                    {"icon": "⚡", "label": "Core Engine", "sub": "Transformation & Scoring", "step": "STEP 2", "highlight": True},
+                    {"icon": "📤", "label": "Context Vector", "sub": "Output Assembly", "step": "STEP 3"}
+                ],
+                "footer_hint": "Real Production Architecture ➡️"
+            },
+            {
+                "slide_number": 3,
+                "title_html": "Real-World Production: <span class='highlight-blue'>Scale & Throughput</span>",
+                "subtitle": "How leading engineering teams implement it in production",
+                "cards": [
+                    {"title": "Production Deployment", "icon": "🏗️", "body": "Deployed across high-throughput clusters with parallel worker threads for low-latency serving."},
+                    {"title": "The Scaling Trade-Off", "icon": "⚠️", "body": "Memory footprint grows with context scale, requiring fast caching and quantized weights."}
+                ],
+                "footer_hint": "Trade-Offs Cheat Sheet ➡️"
+            },
+            {
+                "slide_number": 4,
+                "title_html": "The 'Never Forget' <span class='highlight-yellow'>Cheat Sheet</span>",
+                "subtitle": "Trade-offs you must know for technical interviews",
+                "cheat_sheet": {
+                    "when_to_use": "• High throughput requirements<br>• Scalable distributed workloads<br>• Need clear fault isolation",
+                    "when_it_fails": "• Premature optimization on small trivial workloads<br>• High network latency hops<br>• Memory bottlenecks without proper caching"
+                },
+                "footer_hint": "Senior Engineer Pop Quiz ➡️"
+            },
+            {
+                "slide_number": 5,
+                "title_html": "Senior Engineer <span class='highlight-coral'>Pop Quiz</span>",
+                "subtitle": "Test your architecture judgment",
+                "quiz": {
+                    "title": "System Design Interview Dilemma",
+                    "question": f"When deploying {title} under heavy production traffic, which architecture do you choose?",
+                    "option_a": "Option A: Maximum throughput with asynchronous batching",
+                    "option_b": "Option B: Strict low latency with isolated compute instances"
+                },
+                "footer_hint": "Save & Comment Below 👇"
+            }
+        ]
+    }
+
