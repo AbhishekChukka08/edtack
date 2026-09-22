@@ -14,5 +14,9 @@
   {
     "id": "kv-cache-mechanics",
     "completed_at": "2026-09-21T19:40:25.081690Z"
+  },
+  {
+    "id": "model-quantization-awq-gptq",
+    "completed_at": "2026-09-22T18:14:25.678979Z"
   }
 ]
