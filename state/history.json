@@ -18,5 +18,9 @@
   {
     "id": "model-quantization-awq-gptq",
     "completed_at": "2026-09-22T18:14:25.678979Z"
+  },
+  {
+    "id": "modern-rag-pipeline",
+    "completed_at": "2026-09-23T18:32:46.901810Z"
   }
 ]
