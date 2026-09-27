@@ -34,5 +34,9 @@
   {
     "id": "hybrid-search-rrf",
     "completed_at": "2026-09-26T17:55:21.883813Z"
+  },
+  {
+    "id": "hnsw-vector-indexing",
+    "completed_at": "2026-09-27T18:37:03.583357Z"
   }
 ]
