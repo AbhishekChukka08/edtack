@@ -38,5 +38,9 @@
   {
     "id": "hnsw-vector-indexing",
     "completed_at": "2026-09-27T18:37:03.583357Z"
+  },
+  {
+    "id": "cross-encoder-reranking",
+    "completed_at": "2026-09-28T20:41:43.652200Z"
   }
 ]
