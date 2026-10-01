@@ -50,5 +50,9 @@
   {
     "id": "query-rewriting-multi-query",
     "completed_at": "2026-09-30T19:35:12.883435Z"
+  },
+  {
+    "id": "parent-child-hierarchical-retrieval",
+    "completed_at": "2026-10-01T19:44:46.529826Z"
   }
 ]
