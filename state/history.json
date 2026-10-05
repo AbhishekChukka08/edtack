@@ -66,5 +66,9 @@
   {
     "id": "semantic-caching-llm",
     "completed_at": "2026-10-04T18:18:18.683864Z"
+  },
+  {
+    "id": "metadata-filtering-rbac",
+    "completed_at": "2026-10-05T21:35:34.733754Z"
   }
 ]
