@@ -86,5 +86,9 @@
   {
     "id": "multi-agent-orchestrator-swarms",
     "completed_at": "2026-10-10T18:47:36.879028Z"
+  },
+  {
+    "id": "human-in-the-loop-langgraph",
+    "completed_at": "2026-10-11T19:07:47.424673Z"
   }
 ]
