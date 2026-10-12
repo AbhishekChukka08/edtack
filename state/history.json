@@ -90,5 +90,9 @@
   {
     "id": "human-in-the-loop-langgraph",
     "completed_at": "2026-10-11T19:07:47.424673Z"
+  },
+  {
+    "id": "model-context-protocol-mcp",
+    "completed_at": "2026-10-12T22:12:57.936181Z"
   }
 ]
