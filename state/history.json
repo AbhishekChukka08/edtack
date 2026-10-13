@@ -94,5 +94,9 @@
   {
     "id": "model-context-protocol-mcp",
     "completed_at": "2026-10-12T22:12:57.936181Z"
+  },
+  {
+    "id": "vllm-paged-attention",
+    "completed_at": "2026-10-13T20:19:39.006625Z"
   }
 ]
