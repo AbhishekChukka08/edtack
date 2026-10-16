@@ -106,5 +106,9 @@
   {
     "id": "speculative-decoding",
     "completed_at": "2026-10-15T18:31:51.439557Z"
+  },
+  {
+    "id": "peft-lora-qlora",
+    "completed_at": "2026-10-16T18:17:15.770476Z"
   }
 ]
